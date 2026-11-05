@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A套主持人分组与参与入口">
+  <title>A套主持人页</title>
+  <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./host.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./" aria-label="主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">主持</span></span></a><span class="local-pill"><i></i> 本机生成二维码 · 不上传参与数据</span></header>
+  <main class="host-main">
+    <section class="host-hero"><p class="eyebrow">FORM A · HOST</p><h1>两位参与者，<em>同一套题目。</em></h1><p>本页只生成参与链接与二维码。主持人手动随机分配AI/对照条件，并在两台设备都准备好后口头倒数。</p></section>
+    <section class="host-card">
+      <h2>配对编号</h2><p>使用不含个人信息的编号，让两份导出结果可以配对。</p>
+      <label for="pair-id">本组编号</label><input id="pair-id" type="text" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,39}" value="pair-001" autocomplete="off" spellcheck="false">
+      <p class="host-note">例如 pair-001。两条参与链接会使用同一个编号。</p>
+      <div class="host-random-note" role="note"><strong>分配方式</strong><span>请主持人抽签或用预先确定的方法，把两个条件链接分别给两位参与者。本页不会自动随机，也不会远程启动或同步两台设备。</span></div>
+    </section>
+    <section class="host-participant-grid" aria-label="参与链接">
+      <article class="host-card participant-card"><div class="participant-title"><span class="condition-dot ai-dot"></span><h2>参与者 A · AI 建议</h2></div><p>条件已锁定为AI；参与者仍会看到条件名称。</p><a id="ai-link" class="participant-url" href="./experiment.html?mode=pilot_link&amp;condition=AI&amp;pair_id=pair-001">生成中…</a><div class="qr-frame" id="ai-qr" aria-label="AI条件二维码"></div><div class="participant-actions"><button id="copy-ai" class="button secondary" type="button">复制 AI 链接</button><span id="ai-copy-status" class="copy-status" role="status" aria-live="polite"></span></div></article>
+      <article class="host-card participant-card"><div class="participant-title"><span class="condition-dot control-dot"></span><h2>参与者 B · 自行复查</h2></div><p>条件已锁定为对照；练习阶段显示中性复查提示。</p><a id="control-link" class="participant-url" href="./experiment.html?mode=pilot_link&amp;condition=control&amp;pair_id=pair-001">生成中…</a><div class="qr-frame" id="control-qr" aria-label="对照条件二维码"></div><div class="participant-actions"><button id="copy-control" class="button secondary" type="button">复制对照链接</button><span id="control-copy-status" class="copy-status" role="status" aria-live="polite"></span></div></article>
+    </section>
+    <section class="host-card host-steps"><h2>现场开始步骤</h2><ol><li>主持人用抽签等方式把两个条件分别给两位参与者。</li><li>参与者分别打开各自链接，在本机阅读说明并同意。</li><li>两台页面都显示“已准备，等待主持人口令”后，主持人统一倒数。</li><li>每位参与者听到口令后，在自己的设备点击“开始 A 套”；计时从各自点击时开始，页面不会远程同步。</li><li>结束后分别下载 JSON/CSV；通过主持人自行选择的渠道收回两个文件，再到比较页本地导入。</li></ol></section>
+    <a class="button primary compare-entry" href="./compare.html">导入两份结果并比较</a>
+    <footer class="host-footer">A套试跑版 · 两台设备独立保存 · 不代表正式收数或实时同步</footer>
+  </main>
+  <script src="./vendor/qrcode-generator-2.0.4.js"></script>
+  <script type="module" src="./host.mjs"></script>
+</body>
+</html>

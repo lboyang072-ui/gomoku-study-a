@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A套五子棋决策练习本机试跑">
+  <title>A套五子棋决策试跑</title>
+  <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./experiment.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">试跑</span></span></a><span class="local-pill"><i></i> A套 · 数据保存在本机</span></header>
+  <main class="experiment-main">
+    <section class="experiment-hero"><p class="eyebrow">FORM A · 10 ITEMS</p><h1>独立判断，<em>再复查一步。</em></h1><p>3道基础测 · 4道练习 · 3道无AI后测。所有记录只保存在当前浏览器。</p></section>
+    <div id="notice" class="experiment-notice" role="status" aria-live="polite" hidden></div><div id="toast" class="experiment-toast" role="status" aria-live="polite" hidden></div>
+    <section id="fatal" class="experiment-card" hidden><h2>实验材料暂不可用</h2><p id="fatal-message"></p></section>
+    <section id="start-panel" class="experiment-card">
+      <div class="card-heading"><div><span class="eyebrow">START</span><h2>开始 A 套</h2></div><span id="start-mode-pill" class="pill">本机试跑</span></div>
+      <p>请先阅读说明并同意参与。无需填写姓名、学号或联系方式。匿名编号会由本机生成。</p>
+      <div id="host-assignment" class="host-assignment" hidden><strong id="host-condition-label"></strong><span id="host-pair-label"></span><p>该条件由主持人预先分配，本页不会提供切换入口。</p></div>
+      <fieldset class="mode-choice"><legend>运行模式</legend>
+        <label><input type="radio" name="mode" value="demo" checked><span><b>演示模式</b><small>可手动选择 AI 或对照条件；记录标记为 demo。</small></span></label>
+        <label><input type="radio" name="mode" value="pilot"><span><b>本机试跑记录</b><small>按本机成对区组顺序分配 AI/对照；不是已批准的正式收数。</small></span></label>
+      </fieldset>
+      <fieldset id="demo-condition" class="mode-choice compact"><legend>演示条件</legend>
+        <label><input type="radio" name="condition" value="AI" checked><span><b>AI建议</b></span></label>
+        <label><input type="radio" name="condition" value="control"><span><b>自行复查</b></span></label>
+      </fieldset>
+      <div class="consent-copy"><h3>参与说明</h3><ul><li>本活动包含10道一步攻防判断题，预计需约15–20分钟；实际用时以页面记录为准。</li><li>你可随时退出；已完成的本机记录会保留并可导出。</li><li>基础测和后测不展示建议或正误反馈；练习阶段初选锁定后才显示条件提示。</li><li>编号、选择、用时、问卷回答及版本信息保存在本机；演示数据与试跑数据分开标记。</li><li>静态网页材料可能被技术检查；本版本不保证答案或建议对熟悉源文件的人保密。</li></ul></div>
+      <label class="consent-check"><input id="consent" type="checkbox"><span>我已阅读说明，自愿参加本次本机试跑；我知道可以随时退出。</span></label>
+      <button id="start-run" class="button primary start-button" disabled>开始基础测 <span>→</span></button>
+    </section>
+    <section id="host-ready-panel" class="experiment-card host-ready-card" hidden>
+      <span class="eyebrow">READY · A</span><h2>已准备，等待主持人口令</h2><p id="host-ready-summary"></p>
+      <p>计时尚未开始。请等主持人确认两位参与者都准备好并给出统一口令；口令后在本设备点击下方按钮开始。本页不会远程启动或同步另一台设备。</p>
+      <div class="host-ready-actions"><button id="host-return-consent" class="button secondary">返回说明</button><button id="host-begin-run" class="button primary">口令后开始 A 套</button></div>
+    </section>
+    <section id="run-panel" class="experiment-card run-card" hidden>
+      <div class="run-header"><div><span id="run-stage" class="eyebrow">基础测</span><h2 id="run-title">第1题</h2><p id="run-instruction" class="run-instruction"></p></div><div class="timer-box"><span id="timer-label">剩余时间</span><strong id="timer">01:00</strong></div></div>
+      <div class="run-progress"><div id="progress-fill"></div></div><p id="run-meta" class="run-meta"></p>
+      <div id="board-shell" class="experiment-board-shell"><div class="experiment-board-scroll"><div id="experiment-board" class="experiment-board" role="group" aria-label="15乘15五子棋棋盘"></div></div><div class="board-foot"><span><i class="legend-stone black"></i> 黑方</span><span><i class="legend-stone white"></i> 白方</span><span class="keyboard-hint">方向键移动 · Enter选择</span></div></div>
+      <div id="phase-panel" class="phase-panel"><p id="phase-copy"></p><p id="selected-readout" class="selected-readout">当前选择 <strong>—</strong></p><button id="phase-primary" class="button primary" disabled>确认选择</button></div>
+      <div id="advice-card" class="advice-card" hidden><span class="eyebrow">练习复查</span><h3 id="advice-title">建议</h3><p id="advice-copy"></p><p id="advice-warning">建议仅用于本次条件练习；可保留初选，也可重新检查后选择。</p></div>
+      <div class="run-footer"><span id="step-count"></span><button id="withdraw" class="quiet-button" aria-controls="withdraw-confirmation" aria-expanded="false">退出本次</button></div>
+      <section id="withdraw-confirmation" class="withdraw-confirmation" role="group" aria-labelledby="withdraw-confirmation-title" aria-describedby="withdraw-confirmation-copy" hidden>
+        <h3 id="withdraw-confirmation-title">确认退出本次？</h3>
+        <p id="withdraw-confirmation-copy">已保存的记录会保留；尚未完成的题目不会作为已提交答案。确认后可在结束页导出记录。</p>
+        <div class="withdraw-confirmation-actions"><button id="withdraw-continue" class="button primary">继续答题</button><button id="withdraw-confirm" class="button secondary">确认退出</button></div>
+      </section>
+    </section>
+    <section id="questionnaire" class="experiment-card questionnaire-card" hidden>
+      <div class="card-heading"><div><span class="eyebrow">A FORM · FINAL</span><h2>简短问卷</h2></div><span class="pill">可留空</span></div><p class="questionnaire-note">输入草稿会保存在本机；刷新后恢复。未提交草稿不会转交给下一位参与者。</p>
+      <label>你平时下五子棋的经验<input id="gomoku-experience" type="text" maxlength="240" placeholder="可选"></label>
+      <div class="scale-question"><p>你觉得这套题整体有多难？</p><div id="difficulty-scale" class="scale-options"></div></div>
+      <div class="scale-question"><p>复查阶段对你有多大帮助？</p><div id="help-scale" class="scale-options"></div></div>
+      <div id="trust-question" class="scale-question" hidden><p>你对本次AI建议的信任程度？</p><div id="trust-scale" class="scale-options"></div></div>
+      <label>其他意见<textarea id="comment" rows="3" maxlength="500" placeholder="可选"></textarea></label>
+      <button id="finish-questionnaire" class="button primary">结束并查看导出</button>
+    </section>
+    <section id="complete-panel" class="experiment-card complete-card" hidden>
+      <span class="eyebrow">RUN SAVED</span><h2 id="complete-title">本次已结束</h2><p id="complete-summary"></p>
+      <div id="completion-warning" class="storage-warning" hidden></div>
+      <div class="export-actions"><button id="export-json" class="button primary">导出完整 JSON</button><button id="export-csv" class="button secondary">导出逐题 CSV</button><button id="next-participant" class="button secondary">下一位参与者</button></div>
+    </section>
+    <footer class="experiment-footer">A套试跑版 · 本机记录 · 不代表三套材料已等难或研究协议已冻结。</footer>
+  </main>
+  <script type="module" src="./experiment.mjs"></script>
+</body>
+</html>

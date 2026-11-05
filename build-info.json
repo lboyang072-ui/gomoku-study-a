@@ -1,0 +1,17 @@
+{
+  "schema_version": "gomoku-web-manifest/v1",
+  "app_version": "1.0.0-pages",
+  "material_version": "puzzle-candidates-v3/2026-11-04-r3",
+  "rules_version": "GOMOKU-R001/v0.1",
+  "form_a_sha256": "bf4f9b7417eec1777740f93d6224a25db6758662b5d3fae16aeab5510de74721",
+  "form_a_advice_sha256": "9d2a03f4b9abb6d38b4fad0fc67269b21f975438615a291828bf3170e29e79fa",
+  "form_a_protocol_sha256": "1ddf9f247dedaa103a460c6ad5bbe738cc8b943edc0974325d06b575efeaf71d",
+  "form_a_item_count": 10,
+  "form_a_stage_counts": {
+    "baseline": 3,
+    "practice": 4,
+    "posttest": 3
+  },
+  "delivery": "GITHUB_PAGES_SANITIZED",
+  "isDemo": true
+}

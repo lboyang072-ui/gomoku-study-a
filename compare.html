@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="在本机复算并并列查看两份A套导出"><title>A套结果比较</title><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./host.css"></head>
+<body>
+  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">比较</span></span></a><span class="local-pill"><i></i> 文件仅在当前浏览器读取</span></header>
+  <main class="host-main">
+    <section class="host-hero"><p class="eyebrow">FORM A · LOCAL COMPARISON</p><h1>导入两份结果，<em>本机重新评分。</em></h1><p>选择两位参与者导出的原始JSON或CSV。文件不上传；分数由固定A题面和共用规则核心重新计算。</p></section>
+    <div id="compare-error" class="compare-error" role="alert" hidden></div>
+    <div id="compare-warnings" class="compare-notices" aria-live="polite"></div>
+    <section class="compare-form-grid" aria-label="导入参与者结果">
+      <article class="compare-file-card"><h2>参与者一</h2><label for="file-left">JSON或CSV文件</label><input id="file-left" type="file" accept=".json,.csv,application/json,text/csv"><label for="run-left">本文件中的运行</label><select id="run-left" disabled><option value="">先选择文件</option></select><p id="file-left-status" class="host-note" aria-live="polite"></p></article>
+      <article class="compare-file-card"><h2>参与者二</h2><label for="file-right">JSON或CSV文件</label><input id="file-right" type="file" accept=".json,.csv,application/json,text/csv"><label for="run-right">本文件中的运行</label><select id="run-right" disabled><option value="">先选择文件</option></select><p id="file-right-status" class="host-note" aria-live="polite"></p></article>
+    </section>
+    <button id="compare-runs" class="button primary" type="button" disabled>重新评分并比较</button>
+    <section id="compare-results" class="host-card" hidden>
+      <div class="card-heading"><div><span class="eyebrow">RE-SCORED FROM SOURCE</span><h2>两份运行的逐题对照</h2></div><span id="compare-pair-badge" class="pill"></span></div>
+      <div id="compare-summary" class="compare-summary"></div>
+      <div id="compare-result-warnings" class="compare-notices" aria-live="polite"></div>
+      <div class="compare-table-wrap"><table class="compare-table"><thead id="compare-table-head"></thead><tbody id="compare-table-body"></tbody></table></div>
+      <div class="compare-actions"><button id="export-comparison-json" class="button primary" type="button">导出比较 JSON</button><button id="export-comparison-csv" class="button secondary" type="button">导出比较 CSV</button></div>
+    </section>
+    <p class="host-note">旧demo可用于功能对照并会明确标记；demo不能冒充正式试跑。缺少或不匹配的pilot配对编号不会被静默当作一对。</p>
+    <a href="./" class="quiet-button">返回主持人页</a>
+    <footer class="host-footer">只在本机读取文件 · 不上传 · 不代替独立统计审查</footer>
+  </main>
+  <script type="module" src="./compare.mjs"></script>
+</body>
+</html>

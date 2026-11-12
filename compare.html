@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="在本机复算并并列查看两份A套导出"><title>A套结果比较</title><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./host.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta id="compare-description" name="description" content="在本机复算并并列查看两份A套导出"><title>A套结果比较</title><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./host.css"></head>
 <body>
-  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">比较</span></span></a><span class="local-pill"><i></i> 文件仅在当前浏览器读取</span></header>
+  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">比较</span></span></a><div class="topbar-actions"><button id="language-toggle" class="language-toggle" type="button">English</button><span class="local-pill"><i></i> 文件仅在当前浏览器读取</span></div></header>
   <main class="host-main">
     <section class="host-hero"><p class="eyebrow">FORM A · LOCAL COMPARISON</p><h1>导入两份结果，<em>本机重新评分。</em></h1><p>选择两位参与者导出的原始JSON或CSV。文件不上传；分数由固定A题面和共用规则核心重新计算。</p></section>
     <div id="compare-error" class="compare-error" role="alert" hidden></div>

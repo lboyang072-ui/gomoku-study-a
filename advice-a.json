@@ -7,22 +7,26 @@
     {
       "item_id": "ATT-PHOTO-02",
       "move": "I12",
-      "reason_zh": "沿白方M8、L9、K10、J11的斜线落在I12，立即形成五连。"
+      "reason_zh": "沿白方M8、L9、K10、J11的斜线落在I12，立即形成五连。",
+      "reason_en": "Play at I12 to complete the diagonal through your white stones at J11, K10, L9, and M8, making five in a row and winning immediately."
     },
     {
       "item_id": "DEF-C03",
       "move": "K13",
-      "reason_zh": "封住K13，阻止白方沿G9、H10、I11、J12继续连成五子。"
+      "reason_zh": "封住K13，阻止白方沿G9、H10、I11、J12继续连成五子。",
+      "reason_en": "Block at K13 to stop White completing five along G9, H10, I11, J12, and K13."
     },
     {
       "item_id": "DEF-D01",
       "move": "K11",
-      "reason_zh": "在K11封堵黑方斜线威胁G7、H8、I9、J10，避免对方下一手成五。"
+      "reason_zh": "在K11封堵黑方斜线威胁G7、H8、I9、J10，避免对方下一手成五。",
+      "reason_en": "Play at K11 to block Black’s diagonal threat through G7, H8, I9, J10, and K11 before Black can make five."
     },
     {
       "item_id": "DEF-D03",
       "move": "E12",
-      "reason_zh": "封住E12，阻止白方沿I8、H9、G10、F11延伸成五。"
+      "reason_zh": "封住E12，阻止白方沿I8、H9、G10、F11延伸成五。",
+      "reason_en": "Block at E12 to stop White extending the line through F11, G10, H9, I8, and E12 to make five."
     }
   ]
 }

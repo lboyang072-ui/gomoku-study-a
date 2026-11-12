@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A套五子棋决策练习本机试跑">
+  <meta id="meta-description" name="description" content="A套五子棋决策练习本机试跑">
   <title>A套五子棋决策试跑</title>
   <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./experiment.css">
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">试跑</span></span></a><span class="local-pill"><i></i> A套 · 数据保存在本机</span></header>
+  <header class="topbar"><a class="brand" href="./" aria-label="返回主持人页"><span class="brand-mark">●○</span><span>棋间<span class="brand-light">试跑</span></span></a><div class="topbar-actions"><button id="language-toggle" class="language-toggle" type="button">English</button><span class="local-pill"><i></i> A套 · 数据保存在本机</span></div></header>
   <main class="experiment-main">
     <section class="experiment-hero"><p class="eyebrow">FORM A · 10 ITEMS</p><h1>独立判断，<em>再复查一步。</em></h1><p>3道基础测 · 4道练习 · 3道无AI后测。所有记录只保存在当前浏览器。</p></section>
     <div id="notice" class="experiment-notice" role="status" aria-live="polite" hidden></div><div id="toast" class="experiment-toast" role="status" aria-live="polite" hidden></div>
@@ -47,7 +47,7 @@
       </section>
     </section>
     <section id="questionnaire" class="experiment-card questionnaire-card" hidden>
-      <div class="card-heading"><div><span class="eyebrow">A FORM · FINAL</span><h2>简短问卷</h2></div><span class="pill">可留空</span></div><p class="questionnaire-note">输入草稿会保存在本机；刷新后恢复。未提交草稿不会转交给下一位参与者。</p>
+      <div class="card-heading"><div><span class="eyebrow">A FORM · FINAL</span><h2>简短问卷</h2></div><span class="pill">可留空</span></div><p id="questionnaire-note" class="questionnaire-note">输入草稿会保存在本机；刷新后恢复。未提交草稿不会转交给下一位参与者。</p>
       <label>你平时下五子棋的经验<input id="gomoku-experience" type="text" maxlength="240" placeholder="可选"></label>
       <div class="scale-question"><p>你觉得这套题整体有多难？</p><div id="difficulty-scale" class="scale-options"></div></div>
       <div class="scale-question"><p>复查阶段对你有多大帮助？</p><div id="help-scale" class="scale-options"></div></div>

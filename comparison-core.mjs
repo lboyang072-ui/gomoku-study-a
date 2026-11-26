@@ -1,6 +1,8 @@
 import { evaluate_move } from './engine/engine.mjs';
 
-export const FORM_A_ORDER=['DEF-A04','DEF-B06','DEF-C01','ATT-PHOTO-02','DEF-C03','DEF-D01','DEF-D03','DEF-D05','DEF-E04','DEF-D09'];
+import { FORM_IDS, FORM_ORDERS, formHashes } from './forms.mjs';
+
+export const FORM_A_ORDER=FORM_ORDERS.A;
 const requiredMeta=['participant_id','run_id','form_id','condition','mode','run_status','protocol_version','protocol_sha256','material_version','rules_version','study_sha256','advice_sha256','advice_version'];
 const nullableFields=['pair_id','initial_move','final_move','timeout_phase','started_at','submitted_at','initial_submitted_at','initial_deadline_at','advice_shown_at'];
 const boolFields=['initial_correct','final_correct','timeout','timing_valid'];
@@ -57,24 +59,28 @@ function runsFromCsv(text){
 export function parseExportText(filename,text){
   if(/\.csv$/i.test(filename))return runsFromCsv(text);
   let data;try{data=JSON.parse(String(text).replace(/^\uFEFF/,''));}catch{throw new Error('JSON文件无法解析');}
-  if(data?.schema_version!=='gomoku-study-export/v1'||data.form_id!=='A')throw new Error('文件不是A套原始参与者导出JSON');
+  if(data?.schema_version!=='gomoku-study-export/v1'||!FORM_IDS.includes(data.form_id))throw new Error('文件不是原始参与者导出JSON');
   let runs=Array.isArray(data.runs)?data.runs.filter(Boolean):[];
   if(!runs.length&&Array.isArray(data.items)&&data.items.length){const groups=new Map();for(const row of data.items){if(!groups.has(row.run_id))groups.set(row.run_id,{...row,items:[]});groups.get(row.run_id).items.push(row);}runs=[...groups.values()];}
   if(!runs.length)throw new Error('导出JSON中没有可选运行');
-  const ids=new Set();for(const run of runs){if(!run.run_id)throw new Error('运行缺少run_id');if(ids.has(run.run_id))throw new Error(`重复run_id：${run.run_id}`);ids.add(run.run_id);}
+  const ids=new Set();for(const run of runs){if(run.form_id!==data.form_id)throw new Error('导出文件卷号与运行卷号不一致');if(!run.run_id)throw new Error('运行缺少run_id');if(ids.has(run.run_id))throw new Error(`重复run_id：${run.run_id}`);ids.add(run.run_id);}
   return runs;
 }
 
 export function scoreRun(run,{study,manifest,advice}){
   for(const key of requiredMeta){const value=key==='run_status'?(run.run_status??run.status):run[key];if(value==null)throw new Error(`运行 ${run.run_id??'?'} 缺少${key}`);}
-  if(run.form_id!=='A'||run.protocol_sha256!==manifest.form_a_protocol_sha256||run.protocol_version!==study.protocol_version||run.material_version!==study.material_version||run.rules_version!==study.rules_version||run.study_sha256!==manifest.form_a_sha256||run.advice_sha256!==manifest.form_a_advice_sha256||run.advice_version!==advice.advice_version)throw new Error(`运行 ${run.run_id} 的材料/规则版本不匹配`);
+  if (!FORM_IDS.includes(run.form_id) || run.form_id !== study.form_id) {
+    throw new Error('运行卷号与当前评分材料不匹配');
+  }
+  const order=FORM_ORDERS[run.form_id], hashes=formHashes(manifest,run.form_id);
+  if(run.protocol_sha256!==hashes.protocol||run.protocol_version!==study.protocol_version||run.material_version!==study.material_version||run.rules_version!==study.rules_version||run.study_sha256!==hashes.study||run.advice_sha256!==hashes.advice||run.advice_version!==advice.advice_version)throw new Error(`运行 ${run.run_id} 的材料/规则版本不匹配`);
   if(!['AI','control'].includes(run.condition)||!['demo','pilot'].includes(run.mode))throw new Error(`运行 ${run.run_id} 的条件或模式无效`);
   if(run.mode==='pilot'&&(run.allocation_kind!=='host_link'||(run.pair_id!=null&&!/^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$/.test(run.pair_id))))throw new Error(`试跑 ${run.run_id} 不是有效主持人配对链接记录`);
-  if(run.items?.length!==10)throw new Error(`运行 ${run.run_id} 必须有10条A套题目记录`);
+  if(run.items?.length!==10)throw new Error(`运行 ${run.run_id} 必须有10条题目记录`);
   const itemReports=[],counts={baseline:0,initial:0,final:0,posttest:0,timeouts:0,not_reached:0,technical:0,incomplete:0};
   for(let index=0;index<10;index++){
     const row=normalizeItem(run.items[index]),item=study.items[index];
-    if(row.order!==index+1||row.item_id!==FORM_A_ORDER[index]||item.id!==FORM_A_ORDER[index]||row.stage!==item.stage||row.side!==item.side_to_move||row.task_type!==item.task.type)throw new Error(`运行 ${run.run_id} 的A套题序/元数据不符：第${index+1}题`);
+    if(row.order!==index+1||row.item_id!==order[index]||item.id!==order[index]||row.stage!==item.stage||row.side!==item.side_to_move||row.task_type!==item.task.type)throw new Error(`运行 ${run.run_id} 的题序/元数据不符：第${index+1}题`);
     if(row.status==='not_reached'){
       if(row.initial_move!==null||row.final_move!==null||row.final_correct!==null)throw new Error(`未到达题目包含作答：${row.item_id}`);
       counts.not_reached++;itemReports.push({order:row.order,item_id:row.item_id,stage:row.stage,status:row.status,initial_move:null,initial_correct:null,final_move:null,final_correct:null,timeout:false,timing_valid:null,total_ms:null,processing_delay_ms:row.processing_delay_ms});continue;
@@ -119,12 +125,13 @@ export function scoreRun(run,{study,manifest,advice}){
   if(counts.incomplete)warnings.push(`包含${counts.incomplete}道未提交题`);
   if(!practiceTimeValid)warnings.push('练习总用时无效或不完整，未按0秒计');
   if(itemReports.some(row=>row.timing_valid===false))warnings.push('存在时钟无效题目');
-  return{participant_id:run.participant_id,run_id:run.run_id,form_id:'A',condition:run.condition,mode:run.mode,allocation_kind:run.allocation_kind??null,pair_id:run.pair_id??null,status:runStatus,baseline_correct:counts.baseline,baseline_denominator:3,practice_initial_correct:initialCorrect,practice_initial_denominator:4,practice_final_correct:finalCorrect,practice_final_denominator:4,net_correction:finalCorrect-initialCorrect,net_correction_rate:(finalCorrect-initialCorrect)/4,practice_total_ms:practiceTimeMs,practice_time_valid:practiceTimeValid,posttest_correct:counts.posttest,posttest_denominator:3,timeouts:counts.timeouts,not_reached:counts.not_reached,incomplete:counts.incomplete,technical_failures:counts.technical,items:itemReports,warnings};
+  return{participant_id:run.participant_id,run_id:run.run_id,form_id:run.form_id,condition:run.condition,mode:run.mode,allocation_kind:run.allocation_kind??null,pair_id:run.pair_id??null,status:runStatus,baseline_correct:counts.baseline,baseline_denominator:3,practice_initial_correct:initialCorrect,practice_initial_denominator:4,practice_final_correct:finalCorrect,practice_final_denominator:4,net_correction:finalCorrect-initialCorrect,net_correction_rate:(finalCorrect-initialCorrect)/4,practice_total_ms:practiceTimeMs,practice_time_valid:practiceTimeValid,posttest_correct:counts.posttest,posttest_denominator:3,timeouts:counts.timeouts,not_reached:counts.not_reached,incomplete:counts.incomplete,technical_failures:counts.technical,items:itemReports,warnings};
 }
 
 export function compareRuns(leftRun,rightRun,context){
   if(leftRun.run_id===rightRun.run_id)throw new Error('不能把同一运行与自身比较');
   if(leftRun.mode!==rightRun.mode)throw new Error('不能混合比较demo与pilot运行');
+  if(leftRun.form_id!==rightRun.form_id)throw new Error('两份结果来自不同卷，无法逐题比较');
   const left=scoreRun(leftRun,context),right=scoreRun(rightRun,context),warnings=[...left.warnings,...right.warnings];
   if(left.mode==='pilot'){
     if(left.allocation_kind!=='host_link'||right.allocation_kind!=='host_link')throw new Error('pilot比较只接受主持人链接分组');
@@ -134,18 +141,18 @@ export function compareRuns(leftRun,rightRun,context){
   else if(left.pair_id!==right.pair_id)warnings.push('两份demo的pair_id不同；不能视作同一配对');
   if(left.condition===right.condition)warnings.push('两份记录的条件相同，未形成AI/control对照');
   const rows=left.items.map((item,i)=>({item_id:item.item_id,stage:item.stage,left:{status:item.status,initial_move:item.initial_move,initial_correct:item.initial_correct,final_move:item.final_move,final_correct:item.final_correct,timeout:item.timeout,timing_valid:item.timing_valid,total_ms:item.total_ms},right:{status:right.items[i].status,initial_move:right.items[i].initial_move,initial_correct:right.items[i].initial_correct,final_move:right.items[i].final_move,final_correct:right.items[i].final_correct,timeout:right.items[i].timeout,timing_valid:right.items[i].timing_valid,total_ms:right.items[i].total_ms}}));
-  return{schema_version:'gomoku-study-comparison/v1',form_id:'A',mode:left.mode,pair_id:left.pair_id&&left.pair_id===right.pair_id?left.pair_id:null,warnings,participants:[left,right],items:rows};
+  return{schema_version:'gomoku-study-comparison/v1',form_id:left.form_id,mode:left.mode,pair_id:left.pair_id&&left.pair_id===right.pair_id?left.pair_id:null,warnings,participants:[left,right],items:rows};
 }
 
 function csvCell(value){let text=value==null?'':Array.isArray(value)||typeof value==='object'?JSON.stringify(value):String(value);if(/^[\s]*[=+\-@]/.test(text)||/^[\t\r]/.test(text))text="'"+text;return`"${text.replaceAll('"','""')}"`;}
 export function comparisonToCsv(result,language='zh-CN'){
-  const keys=['pair_id','mode','participant_id','condition','run_id','run_status','item_id','stage','item_status','initial_move','initial_correct','final_move','final_correct','timeout','timing_valid','total_ms','baseline_correct','baseline_denominator','practice_initial_correct','practice_initial_denominator','practice_final_correct','practice_final_denominator','net_correction','net_correction_rate','practice_total_ms','practice_time_valid','posttest_correct','posttest_denominator','not_reached','incomplete','technical_failures'];
-  const chineseHeaders=['配对编号','模式','匿名编号','条件','运行编号','运行状态','题目编号','阶段','题目状态','初选落点','初选正确','终选落点','终选正确','超时','时钟有效','用时毫秒','基础测正确','基础测分母','练习初选正确','练习初选分母','练习终选正确','练习终选分母','净纠错','净纠错率','练习总用时毫秒','练习用时有效','后测正确','后测分母','未到达','未完成','技术故障'];
-  const englishHeaders=['Pair ID','Mode','Participant ID','Condition','Run ID','Run status','Item ID','Stage','Item status','Initial move','Initial correct','Final move','Final correct','Timeout','Timing valid','Duration (ms)','Baseline correct','Baseline denominator','Practice initial correct','Practice initial denominator','Practice final correct','Practice final denominator','Net correction','Net correction rate','Practice total (ms)','Practice time valid','Post-test correct','Post-test denominator','Not reached','Incomplete','Technical failures'];
+  const keys=['pair_id','mode','participant_id','condition','run_id','run_status','item_id','stage','item_status','initial_move','initial_correct','final_move','final_correct','timeout','timing_valid','total_ms','baseline_correct','baseline_denominator','practice_initial_correct','practice_initial_denominator','practice_final_correct','practice_final_denominator','net_correction','net_correction_rate','practice_total_ms','practice_time_valid','posttest_correct','posttest_denominator','not_reached','incomplete','technical_failures','form_id'];
+  const chineseHeaders=['配对编号','模式','匿名编号','条件','运行编号','运行状态','题目编号','阶段','题目状态','初选落点','初选正确','终选落点','终选正确','超时','时钟有效','用时毫秒','基础测正确','基础测分母','练习初选正确','练习初选分母','练习终选正确','练习终选分母','净纠错','净纠错率','练习总用时毫秒','练习用时有效','后测正确','后测分母','未到达','未完成','技术故障','卷号'];
+  const englishHeaders=['Pair ID','Mode','Participant ID','Condition','Run ID','Run status','Item ID','Stage','Item status','Initial move','Initial correct','Final move','Final correct','Timeout','Timing valid','Duration (ms)','Baseline correct','Baseline denominator','Practice initial correct','Practice initial denominator','Practice final correct','Practice final denominator','Net correction','Net correction rate','Practice total (ms)','Practice time valid','Post-test correct','Post-test denominator','Not reached','Incomplete','Technical failures','Form ID'];
   const headers=language==='en'?englishHeaders:chineseHeaders;
   const rows=[];
   for(const report of result.participants){
-    const summary={pair_id:report.pair_id,mode:report.mode,participant_id:report.participant_id,condition:report.condition,run_id:report.run_id,run_status:report.status,baseline_correct:report.baseline_correct,baseline_denominator:report.baseline_denominator,practice_initial_correct:report.practice_initial_correct,practice_initial_denominator:report.practice_initial_denominator,practice_final_correct:report.practice_final_correct,practice_final_denominator:report.practice_final_denominator,net_correction:report.net_correction,net_correction_rate:report.net_correction_rate,practice_total_ms:report.practice_total_ms,practice_time_valid:report.practice_time_valid,posttest_correct:report.posttest_correct,posttest_denominator:report.posttest_denominator,not_reached:report.not_reached,incomplete:report.incomplete,technical_failures:report.technical_failures};
+    const summary={form_id:report.form_id,pair_id:report.pair_id,mode:report.mode,participant_id:report.participant_id,condition:report.condition,run_id:report.run_id,run_status:report.status,baseline_correct:report.baseline_correct,baseline_denominator:report.baseline_denominator,practice_initial_correct:report.practice_initial_correct,practice_initial_denominator:report.practice_initial_denominator,practice_final_correct:report.practice_final_correct,practice_final_denominator:report.practice_final_denominator,net_correction:report.net_correction,net_correction_rate:report.net_correction_rate,practice_total_ms:report.practice_total_ms,practice_time_valid:report.practice_time_valid,posttest_correct:report.posttest_correct,posttest_denominator:report.posttest_denominator,not_reached:report.not_reached,incomplete:report.incomplete,technical_failures:report.technical_failures};
     for(const item of report.items){const row={...summary,item_id:item.item_id,stage:item.stage,item_status:item.status,initial_move:item.initial_move,initial_correct:item.initial_correct,final_move:item.final_move,final_correct:item.final_correct,timeout:item.timeout,timing_valid:item.timing_valid,total_ms:item.total_ms};rows.push(keys.map(key=>csvCell(row[key])).join(','));}
   }
   return[headers.map(csvCell).join(','),...rows].join('\r\n')+'\r\n';

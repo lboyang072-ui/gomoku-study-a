@@ -13,5 +13,11 @@
     "posttest": 3
   },
   "delivery": "GITHUB_PAGES_SANITIZED",
-  "isDemo": true
+  "isDemo": true,
+  "form_b_sha256": "84c1615cc1f42acfae3808e16dfdf2ea055004d36ad023b02b0ea01d01d50710",
+  "form_b_advice_sha256": "ac2f447db2d3da50f2aec985ed379b05130fac918e4b4b904a67324451123fae",
+  "form_b_protocol_sha256": "ac82b055500eac98cb20e0292171cd0230a28beede1566c99650ee2704f217d0",
+  "form_c_sha256": "793edda2b3b97f35f7fc26c75318fec120a823411bbe6b2396426a979be7fed8",
+  "form_c_advice_sha256": "530d35766009d5ddb788e73f32549dcf942c38929ddefbe0c93714d9174db800",
+  "form_c_protocol_sha256": "94ff0642bfae7dc3b54b9eff3b4851eab580626e1b8c9eb7cb1ba71298fb1679"
 }

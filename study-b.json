@@ -1,0 +1,1032 @@
+{
+  "schema_version": "gomoku-study-player/v1",
+  "form_id": "B",
+  "protocol_version": "study-b-v1/2026-11-26-r1",
+  "material_version": "puzzle-candidates-v3/2026-11-04-r3",
+  "rules_version": "GOMOKU-R001/v0.1",
+  "item_count": 10,
+  "stage_counts": {
+    "baseline": 3,
+    "practice": 4,
+    "posttest": 3
+  },
+  "items": [
+    {
+      "order": 1,
+      "stage": "baseline",
+      "id": "DEF-A08",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "H4",
+            "color": "B"
+          },
+          {
+            "pos": "H6",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "I7",
+            "color": "B"
+          },
+          {
+            "pos": "F8",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "I8",
+            "color": "B"
+          },
+          {
+            "pos": "J8",
+            "color": "B"
+          },
+          {
+            "pos": "F9",
+            "color": "B"
+          },
+          {
+            "pos": "K9",
+            "color": "B"
+          },
+          {
+            "pos": "G5",
+            "color": "W"
+          },
+          {
+            "pos": "I5",
+            "color": "W"
+          },
+          {
+            "pos": "F6",
+            "color": "W"
+          },
+          {
+            "pos": "I6",
+            "color": "W"
+          },
+          {
+            "pos": "J6",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "L8",
+            "color": "W"
+          },
+          {
+            "pos": "I9",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "block_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 2,
+      "stage": "baseline",
+      "id": "DEF-A02",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "G6",
+            "color": "B"
+          },
+          {
+            "pos": "D7",
+            "color": "B"
+          },
+          {
+            "pos": "F7",
+            "color": "B"
+          },
+          {
+            "pos": "H7",
+            "color": "B"
+          },
+          {
+            "pos": "J7",
+            "color": "B"
+          },
+          {
+            "pos": "F8",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "G9",
+            "color": "B"
+          },
+          {
+            "pos": "E11",
+            "color": "B"
+          },
+          {
+            "pos": "I11",
+            "color": "B"
+          },
+          {
+            "pos": "E12",
+            "color": "B"
+          },
+          {
+            "pos": "I12",
+            "color": "B"
+          },
+          {
+            "pos": "F13",
+            "color": "B"
+          },
+          {
+            "pos": "G14",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "W"
+          },
+          {
+            "pos": "E8",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "I8",
+            "color": "W"
+          },
+          {
+            "pos": "F9",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          },
+          {
+            "pos": "E10",
+            "color": "W"
+          },
+          {
+            "pos": "G10",
+            "color": "W"
+          },
+          {
+            "pos": "D11",
+            "color": "W"
+          },
+          {
+            "pos": "F11",
+            "color": "W"
+          },
+          {
+            "pos": "G11",
+            "color": "W"
+          },
+          {
+            "pos": "H11",
+            "color": "W"
+          },
+          {
+            "pos": "G12",
+            "color": "W"
+          },
+          {
+            "pos": "G13",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "B",
+      "task": {
+        "type": "block_1",
+        "task_side": "B"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 3,
+      "stage": "baseline",
+      "id": "DEF-B08",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "G5",
+            "color": "B"
+          },
+          {
+            "pos": "G6",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "F8",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "I8",
+            "color": "B"
+          },
+          {
+            "pos": "H6",
+            "color": "W"
+          },
+          {
+            "pos": "I7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "J8",
+            "color": "W"
+          },
+          {
+            "pos": "I9",
+            "color": "W"
+          },
+          {
+            "pos": "K9",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "B",
+      "task": {
+        "type": "block_1",
+        "task_side": "B"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 4,
+      "stage": "practice",
+      "id": "ATT-BATCH-001",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "D5",
+            "color": "B"
+          },
+          {
+            "pos": "D6",
+            "color": "B"
+          },
+          {
+            "pos": "I6",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "I7",
+            "color": "B"
+          },
+          {
+            "pos": "J7",
+            "color": "B"
+          },
+          {
+            "pos": "F8",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "G9",
+            "color": "B"
+          },
+          {
+            "pos": "I9",
+            "color": "B"
+          },
+          {
+            "pos": "J9",
+            "color": "B"
+          },
+          {
+            "pos": "I10",
+            "color": "B"
+          },
+          {
+            "pos": "F5",
+            "color": "W"
+          },
+          {
+            "pos": "E6",
+            "color": "W"
+          },
+          {
+            "pos": "F6",
+            "color": "W"
+          },
+          {
+            "pos": "G6",
+            "color": "W"
+          },
+          {
+            "pos": "H6",
+            "color": "W"
+          },
+          {
+            "pos": "J6",
+            "color": "W"
+          },
+          {
+            "pos": "F7",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "I8",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "win_in_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子立即形成五连或更长连续线。"
+    },
+    {
+      "order": 5,
+      "stage": "practice",
+      "id": "DEF-C07",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "I6",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "I7",
+            "color": "B"
+          },
+          {
+            "pos": "J7",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "G9",
+            "color": "B"
+          },
+          {
+            "pos": "I9",
+            "color": "B"
+          },
+          {
+            "pos": "J9",
+            "color": "B"
+          },
+          {
+            "pos": "I10",
+            "color": "B"
+          },
+          {
+            "pos": "E6",
+            "color": "W"
+          },
+          {
+            "pos": "F6",
+            "color": "W"
+          },
+          {
+            "pos": "H6",
+            "color": "W"
+          },
+          {
+            "pos": "J6",
+            "color": "W"
+          },
+          {
+            "pos": "F7",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "I8",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "B",
+      "task": {
+        "type": "block_1",
+        "task_side": "B"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 6,
+      "stage": "practice",
+      "id": "DEF-D07",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "G4",
+            "color": "B"
+          },
+          {
+            "pos": "H5",
+            "color": "B"
+          },
+          {
+            "pos": "I5",
+            "color": "B"
+          },
+          {
+            "pos": "F6",
+            "color": "B"
+          },
+          {
+            "pos": "H6",
+            "color": "B"
+          },
+          {
+            "pos": "J6",
+            "color": "B"
+          },
+          {
+            "pos": "H7",
+            "color": "B"
+          },
+          {
+            "pos": "G8",
+            "color": "B"
+          },
+          {
+            "pos": "I8",
+            "color": "B"
+          },
+          {
+            "pos": "J8",
+            "color": "B"
+          },
+          {
+            "pos": "F9",
+            "color": "B"
+          },
+          {
+            "pos": "J9",
+            "color": "B"
+          },
+          {
+            "pos": "K10",
+            "color": "B"
+          },
+          {
+            "pos": "H4",
+            "color": "W"
+          },
+          {
+            "pos": "G5",
+            "color": "W"
+          },
+          {
+            "pos": "G6",
+            "color": "W"
+          },
+          {
+            "pos": "I6",
+            "color": "W"
+          },
+          {
+            "pos": "G7",
+            "color": "W"
+          },
+          {
+            "pos": "I7",
+            "color": "W"
+          },
+          {
+            "pos": "J7",
+            "color": "W"
+          },
+          {
+            "pos": "H8",
+            "color": "W"
+          },
+          {
+            "pos": "G9",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          },
+          {
+            "pos": "I9",
+            "color": "W"
+          },
+          {
+            "pos": "H10",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "block_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 7,
+      "stage": "practice",
+      "id": "DEF-E05",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "J6",
+            "color": "B"
+          },
+          {
+            "pos": "K7",
+            "color": "B"
+          },
+          {
+            "pos": "I8",
+            "color": "B"
+          },
+          {
+            "pos": "J8",
+            "color": "B"
+          },
+          {
+            "pos": "H9",
+            "color": "B"
+          },
+          {
+            "pos": "J9",
+            "color": "B"
+          },
+          {
+            "pos": "J10",
+            "color": "B"
+          },
+          {
+            "pos": "K10",
+            "color": "B"
+          },
+          {
+            "pos": "E11",
+            "color": "B"
+          },
+          {
+            "pos": "I11",
+            "color": "B"
+          },
+          {
+            "pos": "H12",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "I7",
+            "color": "W"
+          },
+          {
+            "pos": "J7",
+            "color": "W"
+          },
+          {
+            "pos": "H8",
+            "color": "W"
+          },
+          {
+            "pos": "G9",
+            "color": "W"
+          },
+          {
+            "pos": "I9",
+            "color": "W"
+          },
+          {
+            "pos": "F10",
+            "color": "W"
+          },
+          {
+            "pos": "H10",
+            "color": "W"
+          },
+          {
+            "pos": "G11",
+            "color": "W"
+          },
+          {
+            "pos": "G13",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "B",
+      "task": {
+        "type": "block_1",
+        "task_side": "B"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 8,
+      "stage": "posttest",
+      "id": "DEF-B03",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "F4",
+            "color": "B"
+          },
+          {
+            "pos": "F5",
+            "color": "B"
+          },
+          {
+            "pos": "G5",
+            "color": "B"
+          },
+          {
+            "pos": "E6",
+            "color": "B"
+          },
+          {
+            "pos": "F6",
+            "color": "B"
+          },
+          {
+            "pos": "G6",
+            "color": "B"
+          },
+          {
+            "pos": "H6",
+            "color": "B"
+          },
+          {
+            "pos": "F7",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "I7",
+            "color": "B"
+          },
+          {
+            "pos": "J7",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "I9",
+            "color": "B"
+          },
+          {
+            "pos": "E3",
+            "color": "W"
+          },
+          {
+            "pos": "F3",
+            "color": "W"
+          },
+          {
+            "pos": "E5",
+            "color": "W"
+          },
+          {
+            "pos": "D6",
+            "color": "W"
+          },
+          {
+            "pos": "I6",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "I8",
+            "color": "W"
+          },
+          {
+            "pos": "J8",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          },
+          {
+            "pos": "J9",
+            "color": "W"
+          },
+          {
+            "pos": "J10",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "block_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 9,
+      "stage": "posttest",
+      "id": "DEF-B04",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "F4",
+            "color": "B"
+          },
+          {
+            "pos": "G5",
+            "color": "B"
+          },
+          {
+            "pos": "E6",
+            "color": "B"
+          },
+          {
+            "pos": "F6",
+            "color": "B"
+          },
+          {
+            "pos": "G6",
+            "color": "B"
+          },
+          {
+            "pos": "H6",
+            "color": "B"
+          },
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "I7",
+            "color": "B"
+          },
+          {
+            "pos": "J7",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "I9",
+            "color": "B"
+          },
+          {
+            "pos": "E5",
+            "color": "W"
+          },
+          {
+            "pos": "D6",
+            "color": "W"
+          },
+          {
+            "pos": "I6",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "I8",
+            "color": "W"
+          },
+          {
+            "pos": "J8",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          },
+          {
+            "pos": "J9",
+            "color": "W"
+          },
+          {
+            "pos": "J10",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "block_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    },
+    {
+      "order": 10,
+      "stage": "posttest",
+      "id": "DEF-C09",
+      "board": {
+        "size": 15,
+        "pieces": [
+          {
+            "pos": "G7",
+            "color": "B"
+          },
+          {
+            "pos": "F8",
+            "color": "B"
+          },
+          {
+            "pos": "H8",
+            "color": "B"
+          },
+          {
+            "pos": "F9",
+            "color": "B"
+          },
+          {
+            "pos": "G9",
+            "color": "B"
+          },
+          {
+            "pos": "I9",
+            "color": "B"
+          },
+          {
+            "pos": "H10",
+            "color": "B"
+          },
+          {
+            "pos": "I10",
+            "color": "B"
+          },
+          {
+            "pos": "J10",
+            "color": "B"
+          },
+          {
+            "pos": "K10",
+            "color": "B"
+          },
+          {
+            "pos": "I11",
+            "color": "B"
+          },
+          {
+            "pos": "F6",
+            "color": "W"
+          },
+          {
+            "pos": "G6",
+            "color": "W"
+          },
+          {
+            "pos": "E7",
+            "color": "W"
+          },
+          {
+            "pos": "H7",
+            "color": "W"
+          },
+          {
+            "pos": "I7",
+            "color": "W"
+          },
+          {
+            "pos": "G8",
+            "color": "W"
+          },
+          {
+            "pos": "H9",
+            "color": "W"
+          },
+          {
+            "pos": "G10",
+            "color": "W"
+          },
+          {
+            "pos": "K11",
+            "color": "W"
+          },
+          {
+            "pos": "J12",
+            "color": "W"
+          }
+        ]
+      },
+      "side_to_move": "W",
+      "task": {
+        "type": "block_1",
+        "task_side": "W"
+      },
+      "prompt_zh": "轮到当前方，请落一子阻止对方所有下一手成五点；己方直接成五获胜同样正确。"
+    }
+  ],
+  "protocol_sha256": "ac82b055500eac98cb20e0292171cd0230a28beede1566c99650ee2704f217d0"
+}

@@ -1,6 +1,8 @@
+import { FORM_ORDERS, hasFormOrder } from './forms.mjs';
+
 export const EXPERIMENT_STORAGE_KEY = 'gomoku-study-a.v1';
 export const EXPERIMENT_PROTOCOL_VERSION = 'study-a-v1/2026-11-05-r1';
-export const FORM_A_ORDER = ['DEF-A04','DEF-B06','DEF-C01','ATT-PHOTO-02','DEF-C03','DEF-D01','DEF-D03','DEF-D05','DEF-E04','DEF-D09'];
+export const FORM_A_ORDER = FORM_ORDERS.A;
 
 const clone = value => structuredClone(value);
 const stageFor = item => item.stage;
@@ -28,21 +30,23 @@ function emptyItem(item) {
 }
 
 export function createExperimentSession({study,advice,storage,clock={wallNow:()=>Date.now(),monoNow:()=>performance.now()},uuid=()=>crypto.randomUUID(),randomSeed}={}) {
-  if(!study||study.form_id!=='A'||!Array.isArray(study.items)) throw new Error('A套材料不可用');
-  if(study.items.length!==10||study.items.map(x=>x.id).join('|')!==FORM_A_ORDER.join('|')) throw new Error('A套题序/题量不匹配');
+  if (!hasFormOrder(study)) throw new Error('实验材料题序/题量不匹配');
+  const {form_id: formId, protocol_version: protocolVersion} = study;
+  const expectedOrder = FORM_ORDERS[formId].join('|');
+  const storageKey = formId === 'A' ? EXPERIMENT_STORAGE_KEY : `gomoku-study-${formId.toLowerCase()}.v1`;
   const adviceById=new Map((advice?.items??[]).map(x=>[x.item_id,x]));
-  let persisted=true,issues=[],data={schema_version:1,form_id:'A',protocol_version:EXPERIMENT_PROTOCOL_VERSION,runs:[],active_run:null,allocation_state:null};
+  let persisted=true,issues=[],data={schema_version:1,form_id:formId,protocol_version:protocolVersion,runs:[],active_run:null,allocation_state:null};
   const nowMs=()=>Number(clock.wallNow());
   const iso=ms=>new Date(ms).toISOString();
   const pushIssue=message=>{if(!issues.includes(message))issues.push(message);};
-  const validStoredRun=run=>run&&run.form_id==='A'&&run.protocol_version===EXPERIMENT_PROTOCOL_VERSION&&run.material_version===study.material_version&&run.rules_version===study.rules_version&&run.study_sha256===study.study_sha256&&run.advice_sha256===study.advice_sha256&&(run.ui_language===undefined||['zh-CN','en'].includes(run.ui_language))&&(run.pair_id===undefined||run.pair_id===null||(run.mode==='pilot'&&run.allocation_kind==='host_link'&&typeof run.pair_id==='string'&&/^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$/.test(run.pair_id)))&&Array.isArray(run.items)&&run.items.length===10&&run.items.map(x=>x.item_id).join('|')===FORM_A_ORDER.join('|');
+  const validStoredRun=run=>run&&run.form_id===formId&&run.protocol_version===protocolVersion&&run.material_version===study.material_version&&run.rules_version===study.rules_version&&run.study_sha256===study.study_sha256&&run.advice_sha256===study.advice_sha256&&(run.ui_language===undefined||['zh-CN','en'].includes(run.ui_language))&&(run.pair_id===undefined||run.pair_id===null||(run.mode==='pilot'&&run.allocation_kind==='host_link'&&typeof run.pair_id==='string'&&/^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$/.test(run.pair_id)))&&Array.isArray(run.items)&&run.items.length===10&&run.items.map(x=>x.item_id).join('|')===expectedOrder;
   try{
-    const raw=storage.getItem(EXPERIMENT_STORAGE_KEY);
+    const raw=storage.getItem(storageKey);
     if(raw!==null){
       const parsed=JSON.parse(raw);
-      if(!parsed||parsed.schema_version!==1||parsed.form_id!=='A'||!Array.isArray(parsed.runs)||!(parsed.active_run===null||parsed.active_run&&Array.isArray(parsed.active_run.items))) throw new Error('A套记录格式不受支持');
-      if(parsed.protocol_version!==EXPERIMENT_PROTOCOL_VERSION) throw new Error('A套记录版本不匹配；旧记录未覆盖，请先导出并联系工作人员。');
-      if(parsed.runs.some(run=>!validStoredRun(run))||(parsed.active_run&&!validStoredRun(parsed.active_run)))throw new Error('A套运行材料/hash不匹配；旧记录未覆盖，请先导出并联系工作人员。');
+      if(!parsed||parsed.schema_version!==1||parsed.form_id!==formId||!Array.isArray(parsed.runs)||!(parsed.active_run===null||parsed.active_run&&Array.isArray(parsed.active_run.items))) throw new Error('实验记录格式不受支持');
+      if(parsed.protocol_version!==protocolVersion) throw new Error('实验记录版本不匹配；旧记录未覆盖，请先导出并联系工作人员。');
+      if(parsed.runs.some(run=>!validStoredRun(run))||(parsed.active_run&&!validStoredRun(parsed.active_run)))throw new Error('实验运行材料/hash不匹配；旧记录未覆盖，请先导出并联系工作人员。');
       data=parsed;
     }
   }catch(error){persisted=false;pushIssue(`本机记录不可读，原数据未覆盖：${error.message}`);}
@@ -50,7 +54,7 @@ export function createExperimentSession({study,advice,storage,clock={wallNow:()=
 
   function save(){
     if(!persisted)return false;
-    try{storage.setItem(EXPERIMENT_STORAGE_KEY,JSON.stringify(data));return true;}
+    try{storage.setItem(storageKey,JSON.stringify(data));return true;}
     catch(error){persisted=false;pushIssue(`本机存储失败，当前只保存在内存：${error.message}。请导出并联系工作人员。`);return false;}
   }
   function currentItem(){const run=data.active_run;return run&&run.status==='in_progress'?run.items[run.current_index]??null:null;}
@@ -104,7 +108,7 @@ export function createExperimentSession({study,advice,storage,clock={wallNow:()=
       assignment={condition:manual_condition,allocation_id:`host-link-${pair_id??uuid()}`,allocation_kind:'host_link'};
     }else assignment={...allocatePilot(),allocation_kind:'paired_local_block'};
     const id=uuid(),now=nowMs();
-    data.active_run={schema_version:1,app_version:'1.0.0-local',protocol_version:EXPERIMENT_PROTOCOL_VERSION,protocol_sha256:study.protocol_sha256,material_version:study.material_version,rules_version:study.rules_version,study_sha256:study.study_sha256,advice_sha256:study.advice_sha256,advice_version:advice?.advice_version??null,form_id:'A',participant_id:`P-${String(id).replaceAll('-','').slice(0,10)}`,run_id:id,mode,ui_language,condition:assignment.condition,allocation_id:assignment.allocation_id,allocation_kind:assignment.allocation_kind,pair_id:pair_id??null,allocation_seed:assignment.allocation_seed??null,allocation_block_id:assignment.allocation_block_id??null,allocation_order:assignment.allocation_order??null,allocation_slot:assignment.allocation_slot??null,consent:{accepted:true,accepted_at:iso(now)},status:'in_progress',phase:'baseline',current_index:0,started_at:iso(now),ended_at:null,items:study.items.map(emptyItem),questionnaire:null,questionnaire_draft:null,events:[],last_wall_ms:now,last_mono_ms:Number(clock.monoNow()),clock_anomaly:false,timing_valid:true};
+    data.active_run={schema_version:1,app_version:'1.0.0-local',protocol_version:protocolVersion,protocol_sha256:study.protocol_sha256,material_version:study.material_version,rules_version:study.rules_version,study_sha256:study.study_sha256,advice_sha256:study.advice_sha256,advice_version:advice?.advice_version??null,form_id:formId,participant_id:`P-${String(id).replaceAll('-','').slice(0,10)}`,run_id:id,mode,ui_language,condition:assignment.condition,allocation_id:assignment.allocation_id,allocation_kind:assignment.allocation_kind,pair_id:pair_id??null,allocation_seed:assignment.allocation_seed??null,allocation_block_id:assignment.allocation_block_id??null,allocation_order:assignment.allocation_order??null,allocation_slot:assignment.allocation_slot??null,consent:{accepted:true,accepted_at:iso(now)},status:'in_progress',phase:'baseline',current_index:0,started_at:iso(now),ended_at:null,items:study.items.map(emptyItem),questionnaire:null,questionnaire_draft:null,events:[],last_wall_ms:now,last_mono_ms:Number(clock.monoNow()),clock_anomaly:false,timing_valid:true};
     addRunEvent('run_started',{mode,condition:assignment.condition,allocation_id:assignment.allocation_id,allocation_kind:assignment.allocation_kind,pair_id:pair_id??null});
     startCurrent();if(!save()&&mode==='pilot'){data.active_run=null;throw new Error('无法持久化pilot运行，未开始参与者流程');}return view();
   }
@@ -155,7 +159,7 @@ export function createExperimentSession({study,advice,storage,clock={wallNow:()=
   function exportData(){
     const runs=[...clone(data.runs),...(data.active_run?[clone(data.active_run)]:[])],items=[];
     for(const run of runs)for(const item of run.items)items.push({...item,item_events:clone(item.events),participant_id:run.participant_id,run_id:run.run_id,form_id:run.form_id,ui_language:run.ui_language??'zh-CN',condition:run.condition,allocation_id:run.allocation_id,allocation_kind:run.allocation_kind,pair_id:run.pair_id??null,allocation_seed:run.allocation_seed,allocation_block_id:run.allocation_block_id,allocation_order:run.allocation_order,allocation_slot:run.allocation_slot,mode:run.mode,run_status:run.status,consent_accepted:run.consent?.accepted??false,run_started_at:run.started_at,run_ended_at:run.ended_at,run_events:clone(run.events),survey_gomoku_experience:run.questionnaire?.gomoku_experience??run.questionnaire_draft?.gomoku_experience??null,survey_perceived_difficulty:run.questionnaire?.perceived_difficulty??run.questionnaire_draft?.perceived_difficulty??null,survey_review_helpfulness:run.questionnaire?.review_helpfulness??run.questionnaire_draft?.review_helpfulness??null,survey_ai_trust:run.questionnaire?.ai_trust??run.questionnaire_draft?.ai_trust??null,survey_comment:run.questionnaire?.comment??run.questionnaire_draft?.comment??null,app_version:run.app_version,protocol_version:run.protocol_version,protocol_sha256:run.protocol_sha256,material_version:run.material_version,rules_version:run.rules_version,study_sha256:run.study_sha256,advice_sha256:run.advice_sha256,advice_version:run.advice_version});
-    return{schema_version:'gomoku-study-export/v1',exported_at:iso(nowMs()),form_id:'A',allocation_state:clone(data.allocation_state),runs,items};
+    return{schema_version:'gomoku-study-export/v1',exported_at:iso(nowMs()),form_id:formId,allocation_state:clone(data.allocation_state),runs,items};
   }
   function exportCsv(){
     const columns=['participant_id','run_id','form_id','ui_language','condition','allocation_id','allocation_kind','pair_id','allocation_seed','allocation_block_id','allocation_order','allocation_slot','mode','run_status','consent_accepted','run_started_at','run_ended_at','run_events','app_version','protocol_version','protocol_sha256','material_version','rules_version','study_sha256','advice_sha256','advice_version','order','stage','item_id','side','task_type','status','initial_move','initial_correct','initial_ms','initial_submitted_at','initial_deadline_at','advice_shown_at','final_move','final_correct','review_ms','total_ms','deadline_at','timeout','timeout_phase','processing_delay_ms','timing_valid','started_at','submitted_at','item_events','survey_gomoku_experience','survey_perceived_difficulty','survey_review_helpfulness','survey_ai_trust','survey_comment'];
@@ -165,5 +169,5 @@ export function createExperimentSession({study,advice,storage,clock={wallNow:()=
   function viewWithTimer(){tick();const v=view(),rec=v.active_run?.items[v.active_run.current_index]??null;return {...v,time_remaining_ms:rec?.deadline_at?Math.max(0,rec.deadline_at-nowMs()):null,initial_remaining_ms:rec?.initial_deadline_at&&v.active_run.phase==='initial'?Math.max(0,rec.initial_deadline_at-nowMs()):null};}
   function resume(){const run=data.active_run;if(!run||!['in_progress','questionnaire'].includes(run.status))return;const now=nowMs(),previous=run.last_wall_ms;if(Number.isFinite(previous)&&now<previous){run.clock_anomaly=true;run.timing_valid=false;const rec=currentItem();if(rec){rec.timing_valid=false;rec.initial_ms=null;rec.review_ms=null;rec.total_ms=null;}pushIssue('检测到刷新前系统时钟回拨；受影响时长无效并已标记。');addRunEvent('clock_anomaly',{previous_wall_ms:previous,current_wall_ms:now,source:'reload'});}run.last_wall_ms=now;run.last_mono_ms=Number(clock.monoNow());addRunEvent('reload',{current_index:run.current_index,deadline_at:currentItem()?.deadline_at??null});if(run.status==='in_progress')expireIfNeeded();save();}
   resume();
-  return {get persisted(){return persisted;},get issues(){return [...issues];},view,viewWithTimer,beginRun,selectMove,confirmInitial,submitFinal,updateQuestionnaireDraft,setQuestionnaire,withdraw,visibilityChanged,tick,nextParticipant,exportData,exportCsv,storageKey:EXPERIMENT_STORAGE_KEY};
+  return {get persisted(){return persisted;},get issues(){return [...issues];},view,viewWithTimer,beginRun,selectMove,confirmInitial,submitFinal,updateQuestionnaireDraft,setQuestionnaire,withdraw,visibilityChanged,tick,nextParticipant,exportData,exportCsv,storageKey};
 }

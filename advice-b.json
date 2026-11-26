@@ -1,0 +1,33 @@
+{
+  "schema_version": "gomoku-study-advice/v1",
+  "form_id": "B",
+  "protocol_version": "study-b-v1/2026-11-26-r1",
+  "advice_version": "study-b-rules-advice-v1",
+  "generation_method": "offline_rules_engine",
+  "items": [
+    {
+      "item_id": "ATT-BATCH-001",
+      "move": "E4",
+      "reason_zh": "落在E4，沿 E4、F5、G6、H7、I8 形成连续五子或更多，立即获胜。",
+      "reason_en": "Play E4 to complete the winning line at E4, F5, G6, H7, I8."
+    },
+    {
+      "item_id": "DEF-C07",
+      "move": "D5",
+      "reason_zh": "落在D5后，对手下一手没有任何可以立即成五的落点。",
+      "reason_en": "Play D5 to remove all of the opponent's immediate winning moves."
+    },
+    {
+      "item_id": "DEF-D07",
+      "move": "L11",
+      "reason_zh": "落在L11后，对手下一手没有任何可以立即成五的落点。",
+      "reason_en": "Play L11 to remove all of the opponent's immediate winning moves."
+    },
+    {
+      "item_id": "DEF-E05",
+      "move": "F7",
+      "reason_zh": "落在F7后，对手下一手没有任何可以立即成五的落点。",
+      "reason_en": "Play F7 to remove all of the opponent's immediate winning moves."
+    }
+  ]
+}
